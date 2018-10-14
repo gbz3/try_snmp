@@ -5,6 +5,7 @@ package com.github.gbz3.try_snmp;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.List;
 
 import org.snmp4j.TransportMapping;
@@ -27,6 +28,7 @@ import org.snmp4j.security.SecurityModel;
 import org.snmp4j.security.USM;
 import org.snmp4j.smi.GenericAddress;
 import org.snmp4j.smi.Integer32;
+import org.snmp4j.smi.IpAddress;
 import org.snmp4j.smi.OID;
 import org.snmp4j.smi.OctetString;
 import org.snmp4j.smi.Variable;
@@ -47,6 +49,11 @@ public class V2cStubAgent extends BaseAgent {
 	/** 整数のオブジェクトを作成 */
 	public static MOScalar<? extends Variable> mo( String oid, int value ) {
 		return new MOScalar<Integer32>( new OID( oid ), MOAccessImpl.ACCESS_READ_ONLY, new Integer32( value ) );
+	}
+
+	/** IPアドレスのオブジェクトを作成 */
+	public static MOScalar<? extends Variable> mo( String oid, InetAddress addr ) {
+		return new MOScalar<IpAddress>( new OID( oid ), MOAccessImpl.ACCESS_READ_ONLY, new IpAddress( addr ) );
 	}
 
 	/** オブジェクトを登録。同一OIDが登録済みの場合は失敗する。 */
