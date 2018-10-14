@@ -2,7 +2,9 @@ package com.github.gbz3.try_snmp;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.net.Inet4Address;
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,10 +32,10 @@ public class AppTest {
 
 	@Test
 	@DisplayName( "SNMP-GET - 1件取得" )
-    public void testApp()
+    public void testApp() throws Exception
     {
 		// expect
-		final String MIB_OID_ROOT = ".1.3.6.1.4.1";
+		final String MIB_OID_ROOT = ".1.3.6.1.4.1.9999";
 
 		// setup
 		agent.regist( Arrays.asList(
@@ -45,7 +47,12 @@ public class AppTest {
 				) );
 
 		// do
-		assertThat( true );
+		final List<String> result = V2cClient.walk( MIB_OID_ROOT, Inet4Address.getByName( "127.0.0.1" ) );
+
+		// verify
+		assertThat( result ).isNotNull();
+		assertThat( result.size() ).isGreaterThan( 0 );
+		assertThat( result ).containsExactly( "0", "1", "2", "3", "4" );
     }
 
 }
